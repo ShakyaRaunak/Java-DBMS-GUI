@@ -32,8 +32,8 @@ import javax.swing.JTextField;
  */
 public class QueryPanel extends JPanel {
 
-    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);  
-    
+    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);
+
     private Box mainbox, hbox, hbox1, hbox4, hbox5, hbox6, hbox7, hbox8, hbox9, hbox10;
     private JLabel title, lbl1, lbl4, lbl5, lbl6, lbl7;
     static JTextArea txt1, txt2;

@@ -9,7 +9,7 @@ package com.javadbmsgui.utils;
  *
  * @author raunakshakya
  */
-public class DatabaseOptionUtils {
+public class DatabaseUtils {
     
     //configuration for oracle db
     public static final String ORACLE_DB_LABEL = "Oracle DB 12c";

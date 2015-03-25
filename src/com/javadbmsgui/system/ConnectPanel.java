@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static com.javadbmsgui.system.QueryPanel.rs;
 import static com.javadbmsgui.system.QueryPanel.stmt;
-import com.javadbmsgui.utils.DatabaseOptionUtils;
+import com.javadbmsgui.utils.DatabaseUtils;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.Box;
@@ -37,30 +37,30 @@ import javax.swing.JTextField;
  */
 public class ConnectPanel extends JPanel {
 
-    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);  
-    
+    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);
+
     private static final String[] dbms = {
-        DatabaseOptionUtils.SELECT_DBMS_LABEL,
-        DatabaseOptionUtils.ORACLE_DB_LABEL,
-        DatabaseOptionUtils.POSTGRES_DB_LABEL,
-        DatabaseOptionUtils.SQL_SERVER_DB_LABEL,
-        DatabaseOptionUtils.MYSQL_DB_LABEL
+        DatabaseUtils.SELECT_DBMS_LABEL,
+        DatabaseUtils.ORACLE_DB_LABEL,
+        DatabaseUtils.POSTGRES_DB_LABEL,
+        DatabaseUtils.SQL_SERVER_DB_LABEL,
+        DatabaseUtils.MYSQL_DB_LABEL
     };
 
     private static final String[] drivers = {
-        DatabaseOptionUtils.SELECT_DB_DRIVER_LABEL,
-        DatabaseOptionUtils.ORACLE_DRIVER,
-        DatabaseOptionUtils.POSTGRES_DRIVER,
-        DatabaseOptionUtils.SQL_SERVER_DRIVER,
-        DatabaseOptionUtils.MYSQL_DRIVER
+        DatabaseUtils.SELECT_DB_DRIVER_LABEL,
+        DatabaseUtils.ORACLE_DRIVER,
+        DatabaseUtils.POSTGRES_DRIVER,
+        DatabaseUtils.SQL_SERVER_DRIVER,
+        DatabaseUtils.MYSQL_DRIVER
     };
 
     private static final String[] urls = {
-        DatabaseOptionUtils.SELECT_DB_URL_LABEL,
-        DatabaseOptionUtils.ORACLE_DB_URL,
-        DatabaseOptionUtils.POSTGRES_DB_URL,
-        DatabaseOptionUtils.SQL_SERVER_DB_URL,
-        DatabaseOptionUtils.MYSQL_DB_URL
+        DatabaseUtils.SELECT_DB_URL_LABEL,
+        DatabaseUtils.ORACLE_DB_URL,
+        DatabaseUtils.POSTGRES_DB_URL,
+        DatabaseUtils.SQL_SERVER_DB_URL,
+        DatabaseUtils.MYSQL_DB_URL
     };
 
     private Box mainbox, hbox, hbox1, hbox2, hbox3, hbox4, hbox5, hbox6, hbox7, hbox8, hbox9;
@@ -154,15 +154,15 @@ public class ConnectPanel extends JPanel {
                 passwordValue = txt3.getText().trim();
 
                 if ((dbmsValue == null ? dbms[0] == null : dbmsValue.equals(dbms[0])) || dbmsValue == null) {
-                    JOptionPane.showMessageDialog(null, "Please Select DBMS", "Warning", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, bundle.getString("dbms.select"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if ((driverValue == null ? drivers[0] == null : driverValue.equals(drivers[0])) || driverValue == null) {
-                    JOptionPane.showMessageDialog(null, "Please Select Driver", "Warning", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, bundle.getString("driver.select"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if ((urlValue == null ? urls[0] == null : urlValue.equals(urls[0])) || urlValue == null) {
-                    JOptionPane.showMessageDialog(null, "Please Select URL", "Warning", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, bundle.getString("db.url.select"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if (databaseValue == null || "".equals(databaseValue)) {
-                    JOptionPane.showMessageDialog(null, "Please Enter Database", "Warning", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, bundle.getString("database.enter"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if (usernameValue == null || "".equals(usernameValue)) {
-                    JOptionPane.showMessageDialog(null, "Please Enter Username", "Warning", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, bundle.getString("username.enter"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else {
                     try {
                         Class.forName(driverValue);
