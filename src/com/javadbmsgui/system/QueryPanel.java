@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javadbmsgui;
+package com.javadbmsgui.system;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -13,7 +13,9 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import static javadbmsgui.ConnectPanel.conn;
+import static com.javadbmsgui.system.ConnectPanel.conn;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,6 +32,8 @@ import javax.swing.JTextField;
  */
 public class QueryPanel extends JPanel {
 
+    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);  
+    
     private Box mainbox, hbox, hbox1, hbox4, hbox5, hbox6, hbox7, hbox8, hbox9, hbox10;
     private JLabel title, lbl1, lbl4, lbl5, lbl6, lbl7;
     static JTextArea txt1, txt2;
@@ -60,7 +64,7 @@ public class QueryPanel extends JPanel {
         hbox9 = Box.createHorizontalBox();
         hbox10 = Box.createHorizontalBox();
 
-        title = new JLabel("Connection Parameters Chosen For DB Connection");
+        title = new JLabel(bundle.getString("db.connection.parameters.chosen"));
         Font font = new Font("Arial", Font.BOLD, 15);
         title.setFont(font);
         lbl1 = new JLabel("DBMS:                                    ");
@@ -79,7 +83,7 @@ public class QueryPanel extends JPanel {
         txt1 = new JTextArea(10, 20);
         font = new Font("Arial", Font.PLAIN, 12);
         txt1.setFont(font);
-        txt1.setText("Get your database connection first and foremost.....");
+        txt1.setText(bundle.getString("get.db.connection"));
         txt1.setEditable(false);
         txt1.setLineWrap(true);
         txt1.setWrapStyleWord(true);
@@ -95,7 +99,7 @@ public class QueryPanel extends JPanel {
         sp2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        btn1 = new JButton("Execute Query");
+        btn1 = new JButton(bundle.getString("query.execute"));
         btn1.setEnabled(false);
         btn1.addActionListener(new ActionListener() {
             @Override
@@ -106,7 +110,7 @@ public class QueryPanel extends JPanel {
                     queryString = txt1.getText().trim();
 
                     if (queryString.isEmpty()) {
-                        JOptionPane.showMessageDialog(new JFrame(), "Write Query first then press Execute!");
+                        JOptionPane.showMessageDialog(new JFrame(), bundle.getString("query.write.then.execute"));
                     } else if (queryString.contains("select")) {
                         try {
                             stmt = conn.prepareStatement(queryString);
@@ -115,7 +119,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             rs = stmt.executeQuery();
-                            txt2.setText("Query Executed Successfully...");
+                            txt2.setText(bundle.getString("query.executed.success"));
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -127,7 +131,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             int affectedRows = stmt.executeUpdate();
-                            txt2.setText("Query Executed Successfully..." + "\n\n" + affectedRows + " rows affected successfully!");
+                            txt2.setText(bundle.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -141,7 +145,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             rs = stmt.executeQuery();
-                            txt2.setText("Query Executed Successfully...");
+                            txt2.setText(bundle.getString("query.executed.success"));
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -153,7 +157,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             int affectedRows = stmt.executeUpdate();
-                            txt2.setText("Query Executed Successfully..." + "\n\n" + affectedRows + " rows affected successfully!");
+                            txt2.setText(bundle.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -172,7 +176,7 @@ public class QueryPanel extends JPanel {
         }
         );
 
-        btn3 = new JButton("Clear Output Message");
+        btn3 = new JButton(bundle.getString("clear.output.message"));
 
         btn3.setEnabled(false);
         btn3.addActionListener(new ActionListener() {

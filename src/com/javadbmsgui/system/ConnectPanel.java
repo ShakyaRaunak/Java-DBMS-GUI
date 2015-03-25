@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javadbmsgui;
+package com.javadbmsgui.system;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -15,8 +15,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javadbmsgui.QueryPanel.rs;
-import static javadbmsgui.QueryPanel.stmt;
+import static com.javadbmsgui.system.QueryPanel.rs;
+import static com.javadbmsgui.system.QueryPanel.stmt;
+import com.javadbmsgui.utils.DatabaseOptionUtils;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -34,28 +37,30 @@ import javax.swing.JTextField;
  */
 public class ConnectPanel extends JPanel {
 
+    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);  
+    
     private static final String[] dbms = {
-        "----------------------Select DBMS----------------------",
-        "Oracle DB 12c",
-        "PostGre SQL",
-        "SQL Server 2012",
-        "MySQL DB"
+        DatabaseOptionUtils.SELECT_DBMS_LABEL,
+        DatabaseOptionUtils.ORACLE_DB_LABEL,
+        DatabaseOptionUtils.POSTGRES_DB_LABEL,
+        DatabaseOptionUtils.SQL_SERVER_DB_LABEL,
+        DatabaseOptionUtils.MYSQL_DB_LABEL
     };
 
     private static final String[] drivers = {
-        "----------------Select Database Driver----------------",
-        "oracle.jdbc.driver.OracleDriver",
-        "org.postgresql.Driver",
-        "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-        "com.mysql.jdbc.Driver"
+        DatabaseOptionUtils.SELECT_DB_DRIVER_LABEL,
+        DatabaseOptionUtils.ORACLE_DRIVER,
+        DatabaseOptionUtils.POSTGRES_DRIVER,
+        DatabaseOptionUtils.SQL_SERVER_DRIVER,
+        DatabaseOptionUtils.MYSQL_DRIVER
     };
 
     private static final String[] urls = {
-        "-----------------Select Database URL-----------------",
-        "jdbc:oracle:thin:@localhost:1521:",
-        "jdbc:postgresql://localhost:5432/",
-        "jdbc:sqlserver://localhost:1433;databaseName=",
-        "jdbc:mysql://localhost/"
+        DatabaseOptionUtils.SELECT_DB_URL_LABEL,
+        DatabaseOptionUtils.ORACLE_DB_URL,
+        DatabaseOptionUtils.POSTGRES_DB_URL,
+        DatabaseOptionUtils.SQL_SERVER_DB_URL,
+        DatabaseOptionUtils.MYSQL_DB_URL
     };
 
     private Box mainbox, hbox, hbox1, hbox2, hbox3, hbox4, hbox5, hbox6, hbox7, hbox8, hbox9;
@@ -96,7 +101,7 @@ public class ConnectPanel extends JPanel {
         hbox8 = Box.createHorizontalBox();
         hbox9 = Box.createHorizontalBox();
 
-        title = new JLabel("Choose the parameters for Database Connection");
+        title = new JLabel(bundle.getString("choose.db.connection.parameters"));
         Font font = new Font("Arial", Font.BOLD, 15);
         title.setFont(font);
         lbl1 = new JLabel("DBMS:                                    ");
@@ -140,7 +145,7 @@ public class ConnectPanel extends JPanel {
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        btn1 = new JButton("Connect");
+        btn1 = new JButton(bundle.getString("common.connect"));
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -162,7 +167,7 @@ public class ConnectPanel extends JPanel {
                     try {
                         Class.forName(driverValue);
                         conn = DriverManager.getConnection(urlValue + databaseValue, usernameValue, passwordValue);
-                        txt4.setText("Connection Successful!");
+                        txt4.setText(bundle.getString("connection.success"));
                         conCloseBtn.setEnabled(true);
                         flag = 1;
                         QueryPanel.dbmstxt.setText(dbmsValue);
@@ -180,7 +185,7 @@ public class ConnectPanel extends JPanel {
             }
         });
 
-        btn2 = new JButton("Reset");
+        btn2 = new JButton(bundle.getString("common.reset"));
         btn2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -193,7 +198,7 @@ public class ConnectPanel extends JPanel {
             }
         });
 
-        btn3 = new JButton("Clear Output Message");
+        btn3 = new JButton(bundle.getString("clear.output.message"));
         btn3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -201,7 +206,7 @@ public class ConnectPanel extends JPanel {
             }
         });
 
-        conCloseBtn = new JButton("Disconnect");
+        conCloseBtn = new JButton(bundle.getString("common.disconnect"));
         conCloseBtn.setEnabled(false);
         conCloseBtn.addActionListener(new ActionListener() {
 
@@ -226,12 +231,12 @@ public class ConnectPanel extends JPanel {
                 if (conn != null) {
                     try {
                         conn.close();
-                        txt4.setText("Connection is now Closed!");
+                        txt4.setText(bundle.getString("connection.closed"));
                         flag = 1;
-                        QueryPanel.dbmstxt.setText("none");
-                        QueryPanel.databasetxt.setText("none");
-                        QueryPanel.usernametxt.setText("none");
-                        QueryPanel.txt1.setText("Get your database connection first and foremost.....");
+                        QueryPanel.dbmstxt.setText(bundle.getString("common.none"));
+                        QueryPanel.databasetxt.setText(bundle.getString("common.none"));
+                        QueryPanel.usernametxt.setText(bundle.getString("common.none"));
+                        QueryPanel.txt1.setText(bundle.getString("get.db.connection"));
                         QueryPanel.txt1.setEditable(false);
                         QueryPanel.btn1.setEnabled(false);
                         QueryPanel.btn2.setEnabled(false);
