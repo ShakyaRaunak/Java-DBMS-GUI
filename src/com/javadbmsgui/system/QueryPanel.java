@@ -14,7 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.javadbmsgui.system.ConnectPanel.conn;
-import java.util.Locale;
+import com.javadbmsgui.utils.MessageUtils;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -32,7 +32,7 @@ import javax.swing.JTextField;
  */
 public class QueryPanel extends JPanel {
 
-    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);
+    public static final ResourceBundle messages = MessageUtils.MESSAGES;
 
     private Box mainbox, hbox, hbox1, hbox4, hbox5, hbox6, hbox7, hbox8, hbox9, hbox10;
     private JLabel title, lbl1, lbl4, lbl5, lbl6, lbl7;
@@ -64,26 +64,26 @@ public class QueryPanel extends JPanel {
         hbox9 = Box.createHorizontalBox();
         hbox10 = Box.createHorizontalBox();
 
-        title = new JLabel(bundle.getString("db.connection.parameters.chosen"));
+        title = new JLabel(messages.getString("db.connection.parameters.chosen"));
         Font font = new Font("Arial", Font.BOLD, 15);
         title.setFont(font);
-        lbl1 = new JLabel("DBMS:                                    ");
-        lbl4 = new JLabel("Database Name:                 ");
-        lbl5 = new JLabel("User Name:                          ");
-        lbl6 = new JLabel("Insert Your Query Below:                                                                                    ");
-        lbl7 = new JLabel("Output:                                                      ");
+        lbl1 = new JLabel(messages.getString("label.dbms") + ":                                    ");
+        lbl4 = new JLabel(messages.getString("label.database.name") + ":                 ");
+        lbl5 = new JLabel(messages.getString("label.user.name") + ":                          ");
+        lbl6 = new JLabel(messages.getString("insert.query.below") + ":                                                                                               ");
+        lbl7 = new JLabel(messages.getString("common.output") + ":                                                                  ");
 
-        dbmstxt = new JTextField("None", 27);
+        dbmstxt = new JTextField(messages.getString("common.none"), 33);
         dbmstxt.setEditable(false);
-        databasetxt = new JTextField("None", 27);
+        databasetxt = new JTextField(messages.getString("common.none"), 33);
         databasetxt.setEditable(false);
-        usernametxt = new JTextField("None", 27);
+        usernametxt = new JTextField(messages.getString("common.none"), 33);
         usernametxt.setEditable(false);
 
-        txt1 = new JTextArea(10, 20);
+        txt1 = new JTextArea(10, 33);
         font = new Font("Arial", Font.PLAIN, 12);
         txt1.setFont(font);
-        txt1.setText(bundle.getString("get.db.connection"));
+        txt1.setText(messages.getString("get.db.connection"));
         txt1.setEditable(false);
         txt1.setLineWrap(true);
         txt1.setWrapStyleWord(true);
@@ -91,7 +91,7 @@ public class QueryPanel extends JPanel {
         sp1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        txt2 = new JTextArea(8, 20);
+        txt2 = new JTextArea(8, 33);
         txt2.setEditable(false);
         txt2.setLineWrap(true);
         txt2.setWrapStyleWord(true);
@@ -99,7 +99,7 @@ public class QueryPanel extends JPanel {
         sp2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        btn1 = new JButton(bundle.getString("query.execute"));
+        btn1 = new JButton(messages.getString("query.execute"));
         btn1.setEnabled(false);
         btn1.addActionListener(new ActionListener() {
             @Override
@@ -110,7 +110,7 @@ public class QueryPanel extends JPanel {
                     queryString = txt1.getText().trim();
 
                     if (queryString.isEmpty()) {
-                        JOptionPane.showMessageDialog(new JFrame(), bundle.getString("query.write.then.execute"));
+                        JOptionPane.showMessageDialog(new JFrame(), messages.getString("query.write.then.execute"));
                     } else if (queryString.contains("select")) {
                         try {
                             stmt = conn.prepareStatement(queryString);
@@ -119,7 +119,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             rs = stmt.executeQuery();
-                            txt2.setText(bundle.getString("query.executed.success"));
+                            txt2.setText(messages.getString("query.executed.success"));
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -131,7 +131,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             int affectedRows = stmt.executeUpdate();
-                            txt2.setText(bundle.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
+                            txt2.setText(messages.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -145,7 +145,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             rs = stmt.executeQuery();
-                            txt2.setText(bundle.getString("query.executed.success"));
+                            txt2.setText(messages.getString("query.executed.success"));
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -157,7 +157,7 @@ public class QueryPanel extends JPanel {
                         }
                         try {
                             int affectedRows = stmt.executeUpdate();
-                            txt2.setText(bundle.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
+                            txt2.setText(messages.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
                         } catch (SQLException ex) {
                             txt2.setText(ex.getMessage());
                         }
@@ -166,7 +166,7 @@ public class QueryPanel extends JPanel {
             }
         });
 
-        btn2 = new JButton("Clear");
+        btn2 = new JButton(messages.getString("common.clear"));
         btn2.setEnabled(false);
         btn2.addActionListener(new ActionListener() {
             @Override
@@ -176,8 +176,7 @@ public class QueryPanel extends JPanel {
         }
         );
 
-        btn3 = new JButton(bundle.getString("clear.output.message"));
-
+        btn3 = new JButton(messages.getString("clear.output.message"));
         btn3.setEnabled(false);
         btn3.addActionListener(new ActionListener() {
             @Override

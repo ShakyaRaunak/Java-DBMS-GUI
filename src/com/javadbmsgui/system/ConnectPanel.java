@@ -5,6 +5,7 @@
  */
 package com.javadbmsgui.system;
 
+import static com.javadbmsgui.system.ConnectPanel.messages;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
 import static com.javadbmsgui.system.QueryPanel.rs;
 import static com.javadbmsgui.system.QueryPanel.stmt;
 import com.javadbmsgui.utils.DatabaseUtils;
-import java.util.Locale;
+import com.javadbmsgui.utils.MessageUtils;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -37,18 +38,18 @@ import javax.swing.JTextField;
  */
 public class ConnectPanel extends JPanel {
 
-    public ResourceBundle bundle = ResourceBundle.getBundle("MessageBundle", Locale.US);
+    public static final ResourceBundle messages = MessageUtils.MESSAGES;
 
     private static final String[] dbms = {
-        DatabaseUtils.SELECT_DBMS_LABEL,
-        DatabaseUtils.ORACLE_DB_LABEL,
-        DatabaseUtils.POSTGRES_DB_LABEL,
-        DatabaseUtils.SQL_SERVER_DB_LABEL,
-        DatabaseUtils.MYSQL_DB_LABEL
+        messages.getString("label.select.dbms"),
+        messages.getString("label.oracle.db"),
+        messages.getString("label.postgres.db"),
+        messages.getString("label.sql.server.db"),
+        messages.getString("label.mysql.db")
     };
 
     private static final String[] drivers = {
-        DatabaseUtils.SELECT_DB_DRIVER_LABEL,
+        messages.getString("label.select.db.driver"),
         DatabaseUtils.ORACLE_DRIVER,
         DatabaseUtils.POSTGRES_DRIVER,
         DatabaseUtils.SQL_SERVER_DRIVER,
@@ -56,7 +57,7 @@ public class ConnectPanel extends JPanel {
     };
 
     private static final String[] urls = {
-        DatabaseUtils.SELECT_DB_URL_LABEL,
+        messages.getString("label.select.db.url"),
         DatabaseUtils.ORACLE_DB_URL,
         DatabaseUtils.POSTGRES_DB_URL,
         DatabaseUtils.SQL_SERVER_DB_URL,
@@ -70,7 +71,7 @@ public class ConnectPanel extends JPanel {
     private JTextArea txt4;
     private JScrollPane sp;
     private JComboBox com1, com2, com3;
-    private JButton btn1, btn2, btn3, conCloseBtn;
+    private JButton btn1, btn2, btn3, closeDBConnectionButton;
 
     String dbmsValue;
     String driverValue, urlValue;
@@ -101,16 +102,16 @@ public class ConnectPanel extends JPanel {
         hbox8 = Box.createHorizontalBox();
         hbox9 = Box.createHorizontalBox();
 
-        title = new JLabel(bundle.getString("choose.db.connection.parameters"));
+        title = new JLabel(messages.getString("choose.db.connection.parameters"));
         Font font = new Font("Arial", Font.BOLD, 15);
         title.setFont(font);
-        lbl1 = new JLabel("DBMS:                                    ");
-        lbl2 = new JLabel("Driver Name:                        ");
-        lbl3 = new JLabel("URL Name:                            ");
-        lbl4 = new JLabel("Database Name:                 ");
-        lbl5 = new JLabel("User Name:                          ");
-        lbl6 = new JLabel("Password:                            ");
-        lbl7 = new JLabel("Output:                                                      ");
+        lbl1 = new JLabel(messages.getString("label.dbms") + ":                                    ");
+        lbl2 = new JLabel(messages.getString("label.driver.name") + ":                        ");
+        lbl3 = new JLabel(messages.getString("label.url.name") + ":                            ");
+        lbl4 = new JLabel(messages.getString("label.database.name") + ":                 ");
+        lbl5 = new JLabel(messages.getString("label.user.name") + ":                          ");
+        lbl6 = new JLabel(messages.getString("label.password") + ":                            ");
+        lbl7 = new JLabel(messages.getString("common.output") + ":                                                                  ");
 
         com1 = new JComboBox(dbms);
         com1.addActionListener(new ActionListener() {
@@ -145,7 +146,7 @@ public class ConnectPanel extends JPanel {
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        btn1 = new JButton(bundle.getString("common.connect"));
+        btn1 = new JButton(messages.getString("common.connect"));
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -154,21 +155,21 @@ public class ConnectPanel extends JPanel {
                 passwordValue = txt3.getText().trim();
 
                 if ((dbmsValue == null ? dbms[0] == null : dbmsValue.equals(dbms[0])) || dbmsValue == null) {
-                    JOptionPane.showMessageDialog(null, bundle.getString("dbms.select"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, messages.getString("dbms.select"), messages.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if ((driverValue == null ? drivers[0] == null : driverValue.equals(drivers[0])) || driverValue == null) {
-                    JOptionPane.showMessageDialog(null, bundle.getString("driver.select"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, messages.getString("driver.select"), messages.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if ((urlValue == null ? urls[0] == null : urlValue.equals(urls[0])) || urlValue == null) {
-                    JOptionPane.showMessageDialog(null, bundle.getString("db.url.select"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, messages.getString("db.url.select"), messages.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if (databaseValue == null || "".equals(databaseValue)) {
-                    JOptionPane.showMessageDialog(null, bundle.getString("database.enter"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, messages.getString("database.enter"), messages.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else if (usernameValue == null || "".equals(usernameValue)) {
-                    JOptionPane.showMessageDialog(null, bundle.getString("username.enter"), bundle.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, messages.getString("username.enter"), messages.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else {
                     try {
                         Class.forName(driverValue);
                         conn = DriverManager.getConnection(urlValue + databaseValue, usernameValue, passwordValue);
-                        txt4.setText(bundle.getString("connection.success"));
-                        conCloseBtn.setEnabled(true);
+                        txt4.setText(messages.getString("connection.success"));
+                        closeDBConnectionButton.setEnabled(true);
                         flag = 1;
                         QueryPanel.dbmstxt.setText(dbmsValue);
                         QueryPanel.databasetxt.setText(databaseValue);
@@ -179,13 +180,13 @@ public class ConnectPanel extends JPanel {
                         QueryPanel.btn2.setEnabled(true);
                         QueryPanel.btn3.setEnabled(true);
                     } catch (ClassNotFoundException | SQLException exc) {
-                        txt4.setText(exc.getMessage());//exc.getMessage());
+                        txt4.setText(exc.getMessage());
                     }
                 }
             }
         });
 
-        btn2 = new JButton(bundle.getString("common.reset"));
+        btn2 = new JButton(messages.getString("common.reset"));
         btn2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -198,7 +199,7 @@ public class ConnectPanel extends JPanel {
             }
         });
 
-        btn3 = new JButton(bundle.getString("clear.output.message"));
+        btn3 = new JButton(messages.getString("clear.output.message"));
         btn3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -206,9 +207,9 @@ public class ConnectPanel extends JPanel {
             }
         });
 
-        conCloseBtn = new JButton(bundle.getString("common.disconnect"));
-        conCloseBtn.setEnabled(false);
-        conCloseBtn.addActionListener(new ActionListener() {
+        closeDBConnectionButton = new JButton(messages.getString("common.disconnect"));
+        closeDBConnectionButton.setEnabled(false);
+        closeDBConnectionButton.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -231,18 +232,17 @@ public class ConnectPanel extends JPanel {
                 if (conn != null) {
                     try {
                         conn.close();
-                        txt4.setText(bundle.getString("connection.closed"));
+                        txt4.setText(messages.getString("connection.closed"));
                         flag = 1;
-                        QueryPanel.dbmstxt.setText(bundle.getString("common.none"));
-                        QueryPanel.databasetxt.setText(bundle.getString("common.none"));
-                        QueryPanel.usernametxt.setText(bundle.getString("common.none"));
-                        QueryPanel.txt1.setText(bundle.getString("get.db.connection"));
+                        QueryPanel.dbmstxt.setText(messages.getString("common.none"));
+                        QueryPanel.databasetxt.setText(messages.getString("common.none"));
+                        QueryPanel.usernametxt.setText(messages.getString("common.none"));
+                        QueryPanel.txt1.setText(messages.getString("get.db.connection"));
                         QueryPanel.txt1.setEditable(false);
                         QueryPanel.btn1.setEnabled(false);
                         QueryPanel.btn2.setEnabled(false);
                         QueryPanel.btn3.setEnabled(false);
-                        conCloseBtn.setEnabled(false);
-
+                        closeDBConnectionButton.setEnabled(false);
                     } catch (SQLException ex) {
                         txt4.setText(ex.getMessage());
                     }
@@ -283,7 +283,7 @@ public class ConnectPanel extends JPanel {
         hbox7.add(Box.createHorizontalStrut(10));
         hbox7.add(btn2);
         hbox7.add(Box.createHorizontalStrut(10));
-        hbox7.add(conCloseBtn);
+        hbox7.add(closeDBConnectionButton);
 
         hbox8.add(Box.createHorizontalStrut(15));
         hbox8.add(lbl7);
@@ -315,6 +315,5 @@ public class ConnectPanel extends JPanel {
         mainbox.add(hbox9);
 
         add(mainbox);
-
     }
 }
