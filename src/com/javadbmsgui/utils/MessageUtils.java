@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  */
 public class MessageUtils {
 
-    private static final String MESSAGES_LOCATION = "com/javadbmsgui/system/MessageBundle";
+    private static final String MESSAGES_LOCATION = "com/javadbmsgui/system/messages";
     public static ResourceBundle MESSAGES = ResourceBundle.getBundle(MessageUtils.MESSAGES_LOCATION, Locale.US);
 
 }
