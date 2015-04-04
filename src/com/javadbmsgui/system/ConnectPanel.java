@@ -16,7 +16,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static com.javadbmsgui.system.QueryPanel.rs;
+import static com.javadbmsgui.system.QueryPanel.resultSet;
 import static com.javadbmsgui.system.QueryPanel.stmt;
 import com.javadbmsgui.utils.DatabaseUtils;
 import com.javadbmsgui.utils.MessageUtils;
@@ -210,45 +210,54 @@ public class ConnectPanel extends JPanel {
         closeDBConnectionButton = new JButton(messages.getString("common.disconnect"));
         closeDBConnectionButton.setEnabled(false);
         closeDBConnectionButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ConnectPanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ConnectPanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-                if (conn != null) {
-                    try {
-                        conn.close();
-                        txt4.setText(messages.getString("connection.closed"));
-                        flag = 1;
-                        QueryPanel.dbmstxt.setText(messages.getString("common.none"));
-                        QueryPanel.databasetxt.setText(messages.getString("common.none"));
-                        QueryPanel.usernametxt.setText(messages.getString("common.none"));
-                        QueryPanel.txt1.setText(messages.getString("get.db.connection"));
-                        QueryPanel.txt1.setEditable(false);
-                        QueryPanel.btn1.setEnabled(false);
-                        QueryPanel.btn2.setEnabled(false);
-                        QueryPanel.btn3.setEnabled(false);
-                        closeDBConnectionButton.setEnabled(false);
-                    } catch (SQLException ex) {
-                        txt4.setText(ex.getMessage());
-                    }
-                }
+                closeResultSet();
+                closeStatement();
+                closeConnection();
             }
         });
+    }
+
+    private void closeResultSet() {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ConnectPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void closeStatement() {
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ConnectPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void closeConnection() {
+        if (conn != null) {
+            try {
+                conn.close();
+                txt4.setText(messages.getString("connection.closed"));
+                flag = 1;
+                QueryPanel.dbmstxt.setText(messages.getString("common.none"));
+                QueryPanel.databasetxt.setText(messages.getString("common.none"));
+                QueryPanel.usernametxt.setText(messages.getString("common.none"));
+                QueryPanel.txt1.setText(messages.getString("get.db.connection"));
+                QueryPanel.txt1.setEditable(false);
+                QueryPanel.btn1.setEnabled(false);
+                QueryPanel.btn2.setEnabled(false);
+                QueryPanel.btn3.setEnabled(false);
+                closeDBConnectionButton.setEnabled(false);
+            } catch (SQLException ex) {
+                txt4.setText(ex.getMessage());
+            }
+        }
     }
 
     private void addWidgets() {

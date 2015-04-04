@@ -36,13 +36,12 @@ public class QueryPanel extends JPanel {
 
     private Box mainbox, hbox, hbox1, hbox4, hbox5, hbox6, hbox7, hbox8, hbox9, hbox10;
     private JLabel title, lbl1, lbl4, lbl5, lbl6, lbl7;
-    static JTextArea txt1, txt2;
+    public static JTextArea txt1, txt2;
     private JScrollPane sp1, sp2;
-    static JButton btn1, btn2, btn3;
-
-    static JTextField dbmstxt, databasetxt, usernametxt;
-    static PreparedStatement stmt = null;
-    static ResultSet rs = null;
+    public static JButton btn1, btn2, btn3;
+    public static JTextField dbmstxt, databasetxt, usernametxt;
+    public static PreparedStatement stmt = null;
+    public static ResultSet resultSet = null;
 
     public QueryPanel() {
         super(new FlowLayout(FlowLayout.LEFT));
@@ -108,59 +107,22 @@ public class QueryPanel extends JPanel {
                 queryString = txt1.getSelectedText();
                 if (queryString == null) {
                     queryString = txt1.getText().trim();
-
                     if (queryString.isEmpty()) {
                         JOptionPane.showMessageDialog(new JFrame(), messages.getString("query.write.then.execute"));
                     } else if (queryString.contains("select")) {
-                        try {
-                            stmt = conn.prepareStatement(queryString);
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
-                        try {
-                            rs = stmt.executeQuery();
-                            txt2.setText(messages.getString("query.executed.success"));
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
+                        stmt = getPreparedStatement(queryString);
+                        executeQueryOnStatement();
                     } else {
-                        try {
-                            stmt = conn.prepareStatement(queryString);
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
-                        try {
-                            int affectedRows = stmt.executeUpdate();
-                            txt2.setText(messages.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
+                        stmt = getPreparedStatement(queryString);
+                        executeStatement();
                     }
                 } else {
                     if (queryString.contains("select")) {
-                        try {
-                            stmt = conn.prepareStatement(queryString);
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
-                        try {
-                            rs = stmt.executeQuery();
-                            txt2.setText(messages.getString("query.executed.success"));
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
+                        stmt = getPreparedStatement(queryString);
+                        executeQueryOnStatement();
                     } else {
-                        try {
-                            stmt = conn.prepareStatement(queryString);
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
-                        try {
-                            int affectedRows = stmt.executeUpdate();
-                            txt2.setText(messages.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
-                        } catch (SQLException ex) {
-                            txt2.setText(ex.getMessage());
-                        }
+                        stmt = getPreparedStatement(queryString);
+                        executeStatement();
                     }
                 }
             }
@@ -185,6 +147,34 @@ public class QueryPanel extends JPanel {
             }
         }
         );
+    }
+
+    private PreparedStatement getPreparedStatement(String query) {
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(query);
+        } catch (SQLException ex) {
+            txt2.setText(ex.getMessage());
+        }
+        return statement;
+    }
+
+    private void executeStatement() {
+        try {
+            int affectedRows = stmt.executeUpdate();
+            txt2.setText(messages.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
+        } catch (SQLException ex) {
+            txt2.setText(ex.getMessage());
+        }
+    }
+
+    private void executeQueryOnStatement() {
+        try {
+            resultSet = stmt.executeQuery();
+            txt2.setText(messages.getString("query.executed.success"));
+        } catch (SQLException ex) {
+            txt2.setText(ex.getMessage());
+        }
     }
 
     private void addWidgets() {
