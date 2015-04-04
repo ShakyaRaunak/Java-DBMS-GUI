@@ -10,12 +10,15 @@ import com.javadbmsgui.utils.MessageUtils;
 import java.util.ResourceBundle;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Raunak Shakya
  */
 public class JAVADBMSGUI extends JFrame {
+
+    public static Logger logger = Logger.getLogger(JAVADBMSGUI.class);
 
     public static final ResourceBundle messages = MessageUtils.MESSAGES;
 
@@ -35,6 +38,8 @@ public class JAVADBMSGUI extends JFrame {
     }
 
     public static void main(String[] args) {
+        logger.info("JAVADBMSGUI Application started");
+        
         JAVADBMSGUI javadbmsgui = new JAVADBMSGUI();
         javadbmsgui.setSize(LayoutUtils.APPLICATION_WINDOW_WIDTH, LayoutUtils.APPLICATION_WINDOW_HEIGHT);
         javadbmsgui.setResizable(true);

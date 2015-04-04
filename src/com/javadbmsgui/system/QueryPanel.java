@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import static com.javadbmsgui.system.ConnectPanel.conn;
+import static com.javadbmsgui.system.ConnectPanel.connection;
 import com.javadbmsgui.utils.MessageUtils;
 import java.util.ResourceBundle;
 import javax.swing.Box;
@@ -40,7 +40,7 @@ public class QueryPanel extends JPanel {
     private JScrollPane sp1, sp2;
     public static JButton btn1, btn2, btn3;
     public static JTextField dbmstxt, databasetxt, usernametxt;
-    public static PreparedStatement stmt = null;
+    public static PreparedStatement statement = null;
     public static ResultSet resultSet = null;
 
     public QueryPanel() {
@@ -110,18 +110,18 @@ public class QueryPanel extends JPanel {
                     if (queryString.isEmpty()) {
                         JOptionPane.showMessageDialog(new JFrame(), messages.getString("query.write.then.execute"));
                     } else if (queryString.contains("select")) {
-                        stmt = getPreparedStatement(queryString);
+                        statement = getPreparedStatement(queryString);
                         executeQueryOnStatement();
                     } else {
-                        stmt = getPreparedStatement(queryString);
+                        statement = getPreparedStatement(queryString);
                         executeStatement();
                     }
                 } else {
                     if (queryString.contains("select")) {
-                        stmt = getPreparedStatement(queryString);
+                        statement = getPreparedStatement(queryString);
                         executeQueryOnStatement();
                     } else {
-                        stmt = getPreparedStatement(queryString);
+                        statement = getPreparedStatement(queryString);
                         executeStatement();
                     }
                 }
@@ -150,30 +150,29 @@ public class QueryPanel extends JPanel {
     }
 
     private PreparedStatement getPreparedStatement(String query) {
-        PreparedStatement statement = null;
         try {
-            statement = conn.prepareStatement(query);
-        } catch (SQLException ex) {
-            txt2.setText(ex.getMessage());
+            statement = connection.prepareStatement(query);
+        } catch (SQLException exception) {
+            txt2.setText(exception.getMessage());
         }
         return statement;
     }
 
     private void executeStatement() {
         try {
-            int affectedRows = stmt.executeUpdate();
+            int affectedRows = statement.executeUpdate();
             txt2.setText(messages.getString("query.executed.success") + "\n\n" + affectedRows + " rows affected successfully!");
-        } catch (SQLException ex) {
-            txt2.setText(ex.getMessage());
+        } catch (SQLException exception) {
+            txt2.setText(exception.getMessage());
         }
     }
 
     private void executeQueryOnStatement() {
         try {
-            resultSet = stmt.executeQuery();
+            resultSet = statement.executeQuery();
             txt2.setText(messages.getString("query.executed.success"));
-        } catch (SQLException ex) {
-            txt2.setText(ex.getMessage());
+        } catch (SQLException exception) {
+            txt2.setText(exception.getMessage());
         }
     }
 

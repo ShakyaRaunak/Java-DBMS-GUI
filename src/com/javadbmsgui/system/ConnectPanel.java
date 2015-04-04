@@ -6,6 +6,7 @@
 package com.javadbmsgui.system;
 
 import static com.javadbmsgui.system.ConnectPanel.messages;
+import static com.javadbmsgui.system.JAVADBMSGUI.logger;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static com.javadbmsgui.system.QueryPanel.resultSet;
-import static com.javadbmsgui.system.QueryPanel.stmt;
+import static com.javadbmsgui.system.QueryPanel.statement;
 import com.javadbmsgui.utils.DatabaseUtils;
 import com.javadbmsgui.utils.MessageUtils;
 import java.util.ResourceBundle;
@@ -78,7 +79,7 @@ public class ConnectPanel extends JPanel {
     String databaseValue = null;
     String usernameValue = null;
     String passwordValue = null;
-    static Connection conn = null;
+    static Connection connection = null;
     int flag = 0;
 
     public ConnectPanel() {
@@ -166,8 +167,9 @@ public class ConnectPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, messages.getString("username.enter"), messages.getString("common.warning"), JOptionPane.ERROR_MESSAGE);
                 } else {
                     try {
+                        logger.debug("Opening database connection");
                         Class.forName(driverValue);
-                        conn = DriverManager.getConnection(urlValue + databaseValue, usernameValue, passwordValue);
+                        connection = DriverManager.getConnection(urlValue + databaseValue, usernameValue, passwordValue);
                         txt4.setText(messages.getString("connection.success"));
                         closeDBConnectionButton.setEnabled(true);
                         flag = 1;
@@ -180,6 +182,7 @@ public class ConnectPanel extends JPanel {
                         QueryPanel.btn2.setEnabled(true);
                         QueryPanel.btn3.setEnabled(true);
                     } catch (ClassNotFoundException | SQLException exc) {
+                        logger.error("Error with database connection");
                         txt4.setText(exc.getMessage());
                     }
                 }
@@ -212,6 +215,7 @@ public class ConnectPanel extends JPanel {
         closeDBConnectionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                logger.debug("Closing database resources");
                 closeResultSet();
                 closeStatement();
                 closeConnection();
@@ -230,19 +234,19 @@ public class ConnectPanel extends JPanel {
     }
 
     private void closeStatement() {
-        if (stmt != null) {
+        if (statement != null) {
             try {
-                stmt.close();
+                statement.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ConnectPanel.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error("Error closing statement");
             }
         }
     }
 
     private void closeConnection() {
-        if (conn != null) {
+        if (connection != null) {
             try {
-                conn.close();
+                connection.close();
                 txt4.setText(messages.getString("connection.closed"));
                 flag = 1;
                 QueryPanel.dbmstxt.setText(messages.getString("common.none"));
@@ -255,6 +259,7 @@ public class ConnectPanel extends JPanel {
                 QueryPanel.btn3.setEnabled(false);
                 closeDBConnectionButton.setEnabled(false);
             } catch (SQLException ex) {
+                logger.error("Error closing connection");
                 txt4.setText(ex.getMessage());
             }
         }
